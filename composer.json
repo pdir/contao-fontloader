@@ -1,0 +1,30 @@
+{
+  "name":"pdir/contao-fontloader",
+  "description":"A web font loader for Contao",
+  "keywords":["contao", "web", "font", "loader", "layout", "bootstrap", "css", "js"],
+  "type":"contao-module",
+  "homepage":"https://github.com/pdir/contao-fontloader",
+  "license":"LGPL-3.0+",
+  "authors":[
+    {
+      "name":"Contao Stammtisch Dresden",
+      "homepage":"http://www.gondao.de",
+      "role":"Developer",
+      "email": "kontakt@gondao.de"
+    }
+  ],
+  "support":{
+    "issues":"https://github.com/pdir/contao-fontloader/issues"
+  },
+  "require": {
+    "contao/core": ">=3.2,<4-dev",
+    "contao-community-alliance/composer-installer": "*"
+  },
+  "extra":{
+    "contao": {
+      "sources":{
+        "": "system/modules/fontloader"
+      }
+    }
+  }
+}

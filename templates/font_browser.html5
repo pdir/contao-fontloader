@@ -1,0 +1,244 @@
+
+<div id="fontBrowser" class="clr font-browser">
+    <div class="font-filter">
+        <div class="filter-count"><span>15</span></div>
+        <ul class="short-links">
+            <li><a href="#" onclick="return false;" data-sort="popular" title="not active">Populär</a></li>
+            <li><a href="#" onclick="return false;" data-sort="new" title="not active">Neueste</a></li>
+            <!-- <li><a href="#" data-sort=""></a></li> -->
+        </ul>
+        <div class="font-options" onclick="jQuery('.font-options-popup').toggle();"><img src="system/themes/default/images/modules.gif" width="16" height="16" alt="Nach Eigenschaften filtern" data-state="1"> Nach Eigenschaften filtern</div>
+        <div class="search">
+            <label class="invisible" for="fontSearch">Schriftarten suchen</label>
+            <input placeholder="Schriftarten suchen…" type="search" id="fontSearch" class="filter-search">
+        </div>
+    </div>
+    <div class="font-options-popup">
+        Beispieltext: <input type="text" id="exampleText" name="example-text" value="abcABC" disabled /><br>
+        <div class="typekit-options">
+            Typekit Plan: <input type="radio" name="rows" id="rows_0_0" class="tl_radio" value="1rw" onfocus="Backend.getScrollOffset()" onclick="Backend.autoSubmit('tl_layout')"> <label for="rows_0_0"> Trial </label>
+            <input type="radio" name="rows" id="rows_0_1" class="tl_radio" value="2rwh" onfocus="Backend.getScrollOffset()" onclick="Backend.autoSubmit('tl_layout')"> <label for="rows_0_1"> Full </label>
+            <br>
+            Only use own kits?<br>
+        </div>
+        <div class="dynamic-filters"></div>
+    </div>
+    <div class="font-list">
+        Bitte wählen Sie einen Typ aus.
+    </div>
+</div>
+<script>
+    var fontListData = {};
+    jQuery( document ).ready(function($) {
+        if($('#ctrl_sourceType').val() != '') {
+            $('.font-filter').show();
+            $('.font-options-popup').addClass($('#ctrl_sourceType').val());
+        }
+
+        if($('#ctrl_sourceType').val() == 'typekit') {
+            // per_page=2
+            $.getJSON("https://typekit.com/api/v1/json/libraries/trial?callback=?", function (data) {
+                $('.filter-count span').html(data.library.pagination.count);
+                // console.log(data);
+                generateItems (data.library.families);
+
+            });
+        }
+        if($('#ctrl_sourceType').val() == 'gfonts') {
+            // sort=popularity
+            $.getJSON("https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyD1K26O9XztBMTLWxmCGp97k01jDcDIOVw", function (data) {
+                $('.filter-count span').html(data.items.length);
+                fontListData = data;
+                console.log(data);
+                generateItems (data.items);
+            });
+        }
+
+        // live filter
+        $("#fontSearch").keyup(function () {
+            var filter = $(this).val(),
+                count = 0;
+
+            $(".font-list .name").each(function () {
+                var parent = $(this).parent(), length = $(this).text().length>0;
+
+                if ( length && $(this).text().search(new RegExp(filter, "i")) < 0) {
+                    $(this).closest('div[class^="item"]').hide();
+                } else {
+                    $(this).closest('div[class^="item"]').show();
+                    count++;
+                }
+            });
+            $('.filter-count span').text(count);
+        });
+
+    });
+
+    var dynamicFilters = [];
+    function generateItems(obj) {
+        var html = "";
+
+        // Loop through Object and create HTML
+        jQuery.each(obj, function (key, data) {
+            // console.log(data);
+
+            if(data.id) var id = data.id;
+            if(data.family) var id = data.family;
+            if(data.name) var name = data.name;
+            if(data.family) var name = data.family;
+
+            var filterClass = [];
+            if(data.category) filterClass.push(data.category);
+            if(data.variants){
+                jQuery.each(data.variants, function (key, variant) {
+                    filterClass.push(variant);
+                });
+            }
+            dynamicFilters = dynamicFilters.concat(filterClass);
+
+            html += '<div class="item item'+key+' ' + filterClass.join(" ") + '">';
+            html += '   <div class="inner" data-load="' + id + '">';
+            html += '       <div class="preview" onclick="setGoogleFontsParameters(\''+key+'\');return false;"><span style="font-family: \'' + name + '\';">abcABC123</span></div>';
+            html += '       <div class="details">';
+            html += '           <span class="name">' + name + "</span>";
+            // html += "           <span>" + data.link + "</span>";
+            if(data.variants) // google?
+                html += '           <button class="tl_submit" onclick="window.open(\'https://www.google.com/fonts/specimen/'+name+'\');">Vorschau</button>';
+            else
+                html += '           <button class="tl_submit" onclick="window.open(\'https://typekit.com/fonts/'+name.replace(/ /g, '-')+'\').toLowerCase();">Vorschau</button>';
+            // html += '           <img src="system/themes/default/images/index.gif" width="16" height="16" title="Vorschau laden" alt="Vorschau laden" data-state="1">';
+            // html += '           <img src="system/themes/default/images/copy.gif" width="14" height="16" title="Schriftart verwenden" alt="Schriftart verwenden" data-state="2" onclick="showDetails(\''+key+'\');return false;">';
+            if(data.variants) { // google?
+                html += '           <div class="variants"><h4>Varianten</h4><ul>';
+                data.variants.sort();
+                jQuery.each(data.variants, function (key, variant) {
+                    if (variant == 'regular')
+                        html += '<li><input type="checkbox" id="' + data.family + '-' + variant + '" name="variants" value="' + variant + '" checked> <label for="' + data.family + '-' + variant + '">' + variant + '</label></li>';
+                    else
+                        html += '<li><input type="checkbox" id="' + data.family + '-' + variant + '" name="variants" value="' + variant + '"> <label for="' + data.family + '-' + variant + '">' + variant + '</label></li>';
+                });
+                html += '           </ul></div>';
+                html += '           <div class="subsets"><h4>Untergruppen</h4><ul>';
+                jQuery.each(data.subsets, function (key, subset) {
+                    html += '<li><input type="checkbox" id="' + data.family + '-' + subset + '" name="subsets" value="' + subset + '"> <label for="' + data.family + '-' + subset + '">' + subset + '</label></li>';
+                });
+                html += '           </ul>';
+                html += '           </div>';
+            }
+            html += '           <button class="submit tl_submit" onclick="setGoogleFontsParameters(\''+key+'\');return false;">Übernehmen</button>';
+            html += '       </div>';
+            html += "   </div>";
+            html += '</div>';
+        });
+
+        if(jQuery('.filter-count span').html() < 21) html += '<div><button class="tl_submit">nächsten 20 Schriften laden</button></div>';
+
+        // Replace html
+        jQuery(".font-list").html(html);
+        /* jquery(".item .preview span").each(function(index, value) {
+            $(this).html(('#exampleText').val());
+        });*/
+        generateGoogleFontsFilter();
+    }
+
+    function showDetails(key) {
+        console.log(this);
+        var data = fontListData.items[key];
+        jQuery('.font-list .item').removeClass('add');
+        jQuery('.font-list .item'+key).addClass('add');
+        var html = "";
+        html += '<ul>';
+        jQuery.each(data.variants, function (key, variant) {
+            html += '<li><input type="checkbox" id="' + data.family + '-' + variant + '" name="' + variant + '"> <label for="' + data.family + '-' + variant + '">' + variant + '</label></li>';
+        });
+        html += '</ul>';
+        jQuery('.font-list .item'+key+' a .details .variants').html(html);
+        var html = "";
+        html += '<ul>';
+        jQuery.each(data.subsets, function (key, subset) {
+            html += '<li><input type="checkbox" id="' + data.family + '-' + subset + '" name="' + subset + '"> <label for="' + data.family + '-' + subset + '">' + subset + '</label></li>';
+        });
+        html += '</ul>';
+        jQuery('.font-list .item'+key+' a .details .subsets').html(html);
+        return false;
+    }
+
+    function setGoogleFontsParameters(key) {
+        console.log(key);
+        var param = [];
+        param.push(fontListData.items[key].family.replace(/ /g, '+'));
+        param.push(':');
+        var variants = [];
+        jQuery(".font-list .item"+key+" input:checkbox[name=variants]:checked").each(function(){
+            variants.push(jQuery(this).val());
+        });
+        param.push(variants.join(','));
+        if(jQuery(".font-list .item"+key+" input:checkbox[name=subsets]").filter(':checked').length) {
+            param.push('&subset=');
+            var subsets = [];
+            jQuery(".font-list .item" + key + " input:checkbox[name=subsets]:checked").each(function () {
+                subsets.push(jQuery(this).val());
+            });
+            param.push(subsets.join(','));
+        }
+        console.log(param);
+        jQuery("#ctrl_title").val(fontListData.items[key].family);
+        jQuery("#ctrl_gfontsParam").val(param.join(''));
+        jQuery("#pal_fontbrowser_legend legend").click();
+        jQuery("#tl_font_src").submit();
+
+    }
+
+    function generateGoogleFontsUrl() {
+        var apiUrl = [];
+        apiUrl.push('//fonts.googleapis.com/css?family=');
+        apiUrl.push(anonymousPro.family.replace(/ /g, '+'));
+        if (contains('italic', anonymousPro.variants)) {
+            apiUrl.push(':');
+            apiUrl.push('italic');
+        }
+        if (contains('greek', anonymousPro.subsets)) {
+            apiUrl.push('&subset=');
+            apiUrl.push('greek');
+        }
+
+        // url: '//fonts.googleapis.com/css?family=Anonymous+Pro:italic&subset=greek'
+        var url = apiUrl.join('');
+    }
+
+    function generateGoogleFontsFilter() {
+        var filterCount = [];
+        for(i in dynamicFilters){
+            if(typeof dynamicFilters[i])
+                filterCount[dynamicFilters[i]]=(filterCount[dynamicFilters[i]]||0)+1; //increments count if element already exists
+        }
+
+        uniqueDynamicFilters = arrayUnique(dynamicFilters);
+        if(uniqueDynamicFilters.length){
+            var html = '<h2>Filter</h2><ul class="links">';
+            jQuery.each(uniqueDynamicFilters, function (key, data) {
+                var size = 's';
+                if(filterCount[data] > 25) size = 'm';
+                if(filterCount[data] > 50) size = 'l';
+                if(filterCount[data] > 100) size = 'xl';
+                html += '<li class="size-' + size + '" onclick="jQuery(\'.dynamic-filters .links li\').removeClass(\'active\');jQuery(this).addClass(\'active\');jQuery(\'.font-list .item\').hide();jQuery(\'.font-list .item\').filter(\'.' + data + '\').show();">' + data + '</li>';
+            });
+            html += '</ul>';
+            html += '<br style="clear:both;">';
+            jQuery('.dynamic-filters').html(html);
+        }
+    }
+
+    function arrayUnique(arrayName) {
+        var newArray = new Array();
+        label:for(var i=0; i<arrayName.length;i++ ) {
+            for(var j=0; j<newArray.length;j++ ) {
+                if(newArray[j] == arrayName[i])
+                    continue label;
+            }
+            newArray[newArray.length] = arrayName[i];
+        }
+        return newArray;
+    }
+
+</script>

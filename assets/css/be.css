@@ -1,0 +1,230 @@
+
+.font-browser {
+    padding-top: 10px;
+}
+
+.font-browser .font-filter {
+    background: #E0E0E0;
+    padding: 5px 10px;
+    height: 27px;
+    display: none;
+}
+
+.font-browser .font-filter .filter-count,
+.font-browser .font-filter .short-links,
+.font-browser .font-filter .font-options,
+.font-browser .font-filter .search {
+    display: inline-block;
+}
+
+.font-browser .font-filter .filter-count,
+.font-browser .font-filter .short-links,
+.font-browser .font-filter .font-options {
+    padding-top: 7px;
+}
+
+.font-browser .font-filter .filter-count span {
+    background: #b3b3b3;
+    color: #fff;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    padding: 3px;
+}
+
+.font-browser .font-filter .short-links {
+    margin-left: 20px;
+}
+
+.font-browser .font-filter .short-links li {
+    display: inline-block;
+    padding: 0 5px;
+}
+
+.font-browser .font-filter .short-links li a {
+    color: #77ac45;
+}
+
+.font-browser .font-filter .font-options {
+    margin-left: 10px;
+    color: #fff;
+    padding-left: 16px;
+}
+
+.font-browser .font-filter .font-options:hover {
+    cursor: pointer;
+                                         }
+
+.font-browser .font-filter .font-options img {
+    position: absolute;
+    margin-left: -20px;
+}
+
+.font-browser .font-options-popup {
+    display: none;
+    transition: all .2s ease;
+    background: #b3b3b3;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.font-browser .font-options-popup .typekit-options {
+    display: none;
+}
+
+.font-browser .font-options-popup.typekit .typekit-options {
+    display: block;
+}
+
+.font-browser .font-options-popup .dynamic-filters .links:after {
+    clear: both;
+}
+
+.font-browser .font-options-popup .dynamic-filters .links li {
+    float: left;
+    padding: 5px;
+    color: #fff;
+    transition: all .2s ease;
+}
+
+.font-browser .font-options-popup .dynamic-filters .links li.active {
+    color: #77ac45;
+}
+
+.font-browser .font-options-popup .dynamic-filters .links li.size-m {
+    font-size: 1.2em;
+}
+
+.font-browser .font-options-popup .dynamic-filters .links li.size-l {
+    font-size: 1.3em;
+}
+
+.font-browser .font-options-popup .dynamic-filters .links li.size-xl {
+    font-size: 1.5em;
+}
+
+.font-browser .font-filter .search {
+    float: right;
+}
+
+.font-browser .font-filter .search .filter-search {
+    padding: 3px 5px;
+    font-size: 1.4em;
+}
+
+.font-browser .font-list {
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.font-browser .font-list .item {
+    display: inline;
+    float: left;
+    margin-right: 0;
+    margin-bottom: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    width: 138px;
+    transition: all .2s ease;
+}
+/*
+.font-browser .font-list .item:hover {
+    width: 276px;
+}*/
+
+.font-browser .font-list .item .inner {
+    transition: all .2s ease;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.1);
+    color: inherit;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    min-height: 110px;
+    margin-right: 10px;
+}
+
+.font-browser .font-list .item:hover .inner {
+    height: auto;
+}
+
+.font-browser .font-list .item .inner .details .variants,
+.font-browser .font-list .item .inner .details .subsets {
+    display: none;
+}
+
+.font-browser .font-list .item:hover .inner .details .variants,
+.font-browser .font-list .item:hover .inner .details .subsets {
+    display: block;
+}
+
+.font-browser .font-list .item:hover .inner {
+    background: #77ac45;
+    padding-bottom: 35px;
+}
+
+.font-browser .font-list .item .inner .details button.submit {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin: 5px 0 5px -50px;
+    display: none;
+}
+
+.font-browser .font-list .item .inner:hover .details button.submit {
+    display: block;
+}
+
+.font-browser .font-list .item .inner .details div {
+    text-align: left;
+    padding: 5px;
+    color: #fff;
+}
+
+.font-browser .font-list .item .inner .details div h4 {
+    clear: left;
+    margin-top: 5px;
+}
+
+.font-browser .font-list .item .inner .details div ul li {
+    float: left;
+    padding: 5px;
+}
+
+.font-browser .font-list .item .inner .details div ul li label {
+    font-size: 1.3em;
+}
+
+.font-browser .font-list .item .inner .details div ul input[type=checkbox] {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+}
+
+.font-browser .font-list .item .inner .preview {
+    height: 45px;
+    border-bottom: 1px solid #cccccc;
+    padding: 15px 5px 10px 5px;
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.8em;
+    cursor: hand;
+    background: #fff;
+}
+
+.font-browser .font-list .item .inner .details {
+    text-align: center;
+}
+
+.font-browser .font-list .item .inner .details .name {
+    line-height: 1.2em;
+    height: 30px;
+    display: block;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.font-browser .font-list .item .inner .details button {
+    margin-bottom: 3px;
+}

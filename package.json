@@ -1,0 +1,25 @@
+{
+  "name": "contao-fontloader",
+  "version": "0.0.1",
+  "description": "A web font loader for Contao",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pdir/contao-fontloader.git"
+  },
+  "keywords": [
+    "contao",
+    "web",
+    "font",
+    "loader",
+    "layout",
+    "bootstrap",
+    "css",
+    "js"
+  ],
+  "author": "pdir / digital agentur",
+  "license": "LGPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/pdir/contao-fontloader/issues"
+  }
+}
