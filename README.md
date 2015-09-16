@@ -5,7 +5,7 @@ About
 -----
 
 Contao Font Loader provides a administrative interface for browsing and applying web fonts from a variety of sources to layouts.
-The Font Loader is able to load fonts from Typekit. Other sources will be available soon (Google Fonts, Fonts.com).
+The Font Loader is able to load fonts from Typekit and Google Fonts. Other sources will be available soon (Fontdeck, Fonts.com).
 
 
 System requirements
@@ -31,7 +31,6 @@ LGPL-3.0+
 
 ToDo
 ---------------
-* add Google Fonts support
 * add Fonts.com support
 * add Fontdeck support
 * add weloveiconfonts.com support
